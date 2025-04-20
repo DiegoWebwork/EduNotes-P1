@@ -53,6 +53,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/courses/active", isAuthenticated, async (req, res) => {
     try {
       const courses = await storage.getActiveCourses();
+      
+      // If student, filter out already enrolled courses
+      if (req.user && req.user.role === "student") {
+        const enrolledCourses = await storage.getEnrolledCourses(req.user.id);
+        const enrolledCourseIds = enrolledCourses.map(c => c.id);
+        
+        // Return only courses the student isn't already enrolled in
+        const availableCourses = courses.filter(course => !enrolledCourseIds.includes(course.id));
+        return res.json(availableCourses);
+      }
+      
       res.json(courses);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch active courses" });
