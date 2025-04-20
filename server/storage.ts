@@ -80,6 +80,69 @@ export class MemStorage implements IStorage {
     this.sessionStore = new MemoryStore({
       checkPeriod: 86400000, // Prune expired entries every 24h
     });
+    
+    // Initialize with sample data
+    this.initSampleData();
+  }
+  
+  // Initialize sample data for testing
+  private async initSampleData() {
+    // Sample users (with hashed passwords - 'password')
+    if (this.users.size === 0) {
+      // Creating an admin user
+      await this.createUser({
+        username: "admin",
+        password: "5809f08af529b0e94612c9db2a80cfe4bfe5aa2f1b8da6052a1be76b47e0e22a.98b9af4997f28b44f9e4dae63346cf30", // "password"
+        name: "Admin User",
+        email: "admin@example.com",
+        role: "admin"
+      });
+      
+      // Creating a student user
+      await this.createUser({
+        username: "student",
+        password: "5809f08af529b0e94612c9db2a80cfe4bfe5aa2f1b8da6052a1be76b47e0e22a.98b9af4997f28b44f9e4dae63346cf30", // "password"
+        name: "Student User",
+        email: "student@example.com",
+        role: "student"
+      });
+    }
+    
+    // Sample courses
+    if (this.courses.size === 0) {
+      // Web Development Course
+      await this.createCourse({
+        name: "Web Development Fundamentals",
+        description: "Learn the basics of web development including HTML, CSS, and JavaScript. This course is perfect for beginners who want to start their journey in web development.",
+        instructor: "John Smith",
+        duration: 8,
+        lessons: 24,
+        active: true,
+        createdBy: 1 // Admin user
+      });
+      
+      // Data Science Course
+      await this.createCourse({
+        name: "Data Science Essentials",
+        description: "Introduction to data science concepts, tools, and methodologies. Learn how to analyze data and extract meaningful insights.",
+        instructor: "Sarah Johnson",
+        duration: 10,
+        lessons: 30,
+        active: true,
+        createdBy: 1 // Admin user
+      });
+      
+      // Mobile App Development Course
+      await this.createCourse({
+        name: "Mobile App Development",
+        description: "Learn how to build native mobile applications for iOS and Android using React Native. This course covers UI/UX principles and state management.",
+        instructor: "Michael Chen",
+        duration: 12,
+        lessons: 36,
+        active: true,
+        createdBy: 1 // Admin user
+      });
+    }
   }
 
   // User operations

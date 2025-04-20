@@ -106,6 +106,12 @@ export default function Sidebar({ isMobile, toggleSidebar }: SidebarProps) {
                 onClick={() => handleNavigation("/my-courses")} 
               />
               <NavLink 
+                icon={<Users className="h-4 w-4 mr-3" />} 
+                label="Available Courses" 
+                active={location === "/available-courses"} 
+                onClick={() => handleNavigation("/available-courses")} 
+              />
+              <NavLink 
                 icon={<StickyNote className="h-4 w-4 mr-3" />} 
                 label="My Notes" 
                 active={location === "/my-notes"} 
