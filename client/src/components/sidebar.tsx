@@ -89,6 +89,12 @@ export default function Sidebar({ isMobile, toggleSidebar }: SidebarProps) {
                 active={location === "/reports"} 
                 onClick={() => handleNavigation("/reports")} 
               />
+              <NavLink 
+                icon={<User className="h-4 w-4 mr-3" />} 
+                label="My Profile" 
+                active={location === "/profile"} 
+                onClick={() => handleNavigation("/profile")} 
+              />
             </>
           ) : (
             // Student Links

@@ -2,12 +2,29 @@ import type { Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth } from "./auth";
+import { scrypt, randomBytes, timingSafeEqual } from "crypto";
+import { promisify } from "util";
 import { 
   insertCourseSchema, 
   insertNoteSchema, 
   insertEnrollmentSchema
 } from "@shared/schema";
 import { z } from "zod";
+
+const scryptAsync = promisify(scrypt);
+
+async function hashPassword(password: string) {
+  const salt = randomBytes(16).toString("hex");
+  const buf = (await scryptAsync(password, salt, 64)) as Buffer;
+  return `${buf.toString("hex")}.${salt}`;
+}
+
+async function comparePasswords(supplied: string, stored: string) {
+  const [hashed, salt] = stored.split(".");
+  const hashedBuf = Buffer.from(hashed, "hex");
+  const suppliedBuf = (await scryptAsync(supplied, salt, 64)) as Buffer;
+  return timingSafeEqual(hashedBuf, suppliedBuf);
+}
 
 // Middleware to check if user is authenticated
 const isAuthenticated = (req: Request, res: Response, next: Function) => {
@@ -392,6 +409,77 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(usersResponse);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch users" });
+    }
+  });
+  
+  // Update user profile
+  app.put("/api/users/:id", isAuthenticated, async (req, res) => {
+    try {
+      const userId = parseInt(req.params.id, 10);
+      
+      // Users can only update their own profile
+      if (req.user!.id !== userId && req.user!.role !== "admin") {
+        return res.status(403).json({ message: "Forbidden: You can only update your own profile" });
+      }
+      
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      // Extract updatable fields
+      const { name, email, username } = req.body;
+      
+      // Check if username is already taken (if changing)
+      if (username && username !== user.username) {
+        const existingUser = await storage.getUserByUsername(username);
+        if (existingUser && existingUser.id !== userId) {
+          return res.status(400).json({ message: "Username is already taken" });
+        }
+      }
+      
+      const updatedUser = await storage.updateUser(userId, { name, email, username });
+      
+      // Remove password from response
+      const { password, ...userResponse } = updatedUser!;
+      
+      res.json(userResponse);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update user profile" });
+    }
+  });
+  
+  // Change password
+  app.put("/api/users/:id/change-password", isAuthenticated, async (req, res) => {
+    try {
+      const userId = parseInt(req.params.id, 10);
+      
+      // Users can only change their own password
+      if (req.user!.id !== userId && req.user!.role !== "admin") {
+        return res.status(403).json({ message: "Forbidden: You can only change your own password" });
+      }
+      
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      const { currentPassword, newPassword } = req.body;
+      
+      // Verify current password
+      if (!(await comparePasswords(currentPassword, user.password))) {
+        return res.status(400).json({ message: "Current password is incorrect" });
+      }
+      
+      // Hash new password
+      const hashedPassword = await hashPassword(newPassword);
+      
+      // Update password
+      await storage.updateUser(userId, { password: hashedPassword });
+      
+      res.json({ message: "Password changed successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to change password" });
     }
   });
 
