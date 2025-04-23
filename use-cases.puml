@@ -1,0 +1,54 @@
+
+@startuml EduNotes Plataforma Casos de Uso
+
+left to right direction
+skinparam actorStyle awesome
+
+' Atores
+:Aluno: as student
+:Administrador: as admin
+
+' Casos de uso
+rectangle "Plataforma Educacional" {
+  ' Autenticação
+  usecase "Login" as login
+  usecase "Registrar" as register
+  
+  ' Casos de uso do aluno
+  usecase "Ver Cursos Disponíveis" as viewCourses
+  usecase "Inscrever-se em Curso" as enroll
+  usecase "Ver Meus Cursos" as myCourses
+  usecase "Criar Notas" as createNotes
+  usecase "Gerenciar Notas" as manageNotes
+  usecase "Acompanhar Progresso" as trackProgress
+  
+  ' Casos de uso do administrador
+  usecase "Gerenciar Cursos" as manageCourses
+  usecase "Gerenciar Usuários" as manageUsers
+  usecase "Ver Relatórios" as viewReports
+  usecase "Monitorar Progresso dos Alunos" as monitorProgress
+}
+
+' Relacionamentos
+student --> login
+student --> register
+student --> viewCourses
+student --> enroll
+student --> myCourses
+student --> createNotes
+student --> manageNotes
+student --> trackProgress
+
+admin --> login
+admin --> manageCourses
+admin --> manageUsers
+admin --> viewReports
+admin --> monitorProgress
+
+' Extensões
+myCourses ..> createNotes : <<include>>
+manageCourses ..> viewReports : <<extend>>
+monitorProgress ..> viewReports : <<include>>
+
+@enduml
+
