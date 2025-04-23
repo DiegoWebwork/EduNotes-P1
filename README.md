@@ -1,53 +1,59 @@
+![alt text](https://github.com/DiegoWebwork/estrutura-de-dados/blob/main/universidade%20de%20vassouras%20Vertical.png)
 
-# Educational Platform
+# Curso: Engenharia de Software
+# Aluno: Diego Rios dos Santos (202010774)
+# Disciplina: ENGENHARIA DE SOFTWARE CONTINUA 8º Periodo
+# Professor: Fabricio Dias
 
-A web application for managing courses, enrollments and student progress.
+# Plataforma EduNotes
 
-## Prerequisites
+Um aplicativo web para gerenciamento de cursos, matrículas e progresso dos alunos.
+
+## Pré-requisitos
 
 - Node.js
 
-## Installation
+## Instalação
 
-1. Clone the repository in Replit
-2. Install dependencies:
+1. Clone o repositório no Replit
+2. Instale as dependências:
 ```bash
 npm install
 ```
 
-## Running the Application
+## Executando o Aplicativo
 
-1. Click the "Run" button in Replit, or run:
+1. Clique no botão "Run" no Replit, ou execute:
 ```bash
 npm run dev
 ```
 
-2. The application will be available at port 5000
+2. O aplicativo estará disponível na porta 5000
 
-## Features
+## Funcionalidades
 
-- User authentication (students and administrators)
-- Course management
-- Student enrollment
-- Progress tracking
-- Notes system
+- Autenticação de usuários (alunos e administradores)
+- Gerenciamento de cursos
+- Matrícula de alunos
+- Acompanhamento de progresso
+- Sistema de notas
 
-## Project Structure
+## Estrutura do Projeto
 
-- `client/`: Frontend React application
-- `server/`: Backend Express server
-- `shared/`: Shared types and schemas
+- `client/`: Aplicativo frontend em React
+- `server/`: Servidor backend em Express
+- `shared/`: Tipos e esquemas compartilhados
 
-## API Routes
+## Rotas da API
 
-- `/api/auth`: Authentication endpoints
-- `/api/courses`: Course management
-- `/api/enrollments`: Enrollment management
-- `/api/users`: User management
+- `/api/auth`: Endpoints de autenticação
+- `/api/courses`: Gerenciamento de cursos
+- `/api/enrollments`: Gerenciamento de matrículas
+- `/api/users`: Gerenciamento de usuários
 
-## Tech Stack
+## Stack Tecnológico
 
 - Frontend: React, TypeScript, Tailwind CSS
 - Backend: Express.js, PostgreSQL
-- Authentication: Passport.js
+- Autenticação: Passport.js
 - API: REST
