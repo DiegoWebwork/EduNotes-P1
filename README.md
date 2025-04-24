@@ -57,9 +57,10 @@ npm run dev
 - Backend: Express.js, PostgreSQL
 - Autenticação: Passport.js
 - API: REST
+- PlantUML web service
 
 ## Diagrama UML
 ![alt text](https://github.com/DiegoWebwork/EduNotes-P1/blob/main/uml.png)
 
-## Modelo relacional
+## Modelo relacional e modelo de documentos
 ![alt text](https://github.com/DiegoWebwork/EduNotes-P1/blob/main/relacionamentos.png)
