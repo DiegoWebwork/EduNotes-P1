@@ -60,3 +60,6 @@ npm run dev
 
 ## Diagrama UML
 ![alt text](https://github.com/DiegoWebwork/EduNotes-P1/blob/main/uml.png)
+
+## Modelo relacional
+![alt text](https://github.com/DiegoWebwork/EduNotes-P1/blob/main/relacionamentos.png)
